@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_food_delivery_ui/screens/cart_screen.dart';
 import 'package:flutter_food_delivery_ui/screens/restaurant_screen.dart';
 import 'package:flutter_food_delivery_ui/widgets/recent_orders.dart';
 import 'package:flutter_food_delivery_ui/widgets/star_rating.dart';
@@ -110,8 +111,13 @@ class _HomeScreenState extends State<HomeScreen> {
           onPressed: () {},
         ),
         actions: [
-          FlatButton(
-            onPressed: () {},
+          TextButton(
+            onPressed: () {
+              return Navigator.push(context,
+                  MaterialPageRoute(builder: (context) {
+                return CartScreen();
+              }));
+            },
             child: Text(
               'Cart (${currentUser.cart.length})',
               style: TextStyle(

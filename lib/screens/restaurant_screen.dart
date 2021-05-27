@@ -12,6 +12,81 @@ class RestaurantScreen extends StatefulWidget {
 }
 
 class _RestaurantScreenState extends State<RestaurantScreen> {
+  _buildMenuItem(Food menu) {
+    return Center(
+        child: Stack(
+      alignment: Alignment.center,
+      children: [
+        Container(
+          height: 175,
+          width: 175,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(15.0),
+            image: DecorationImage(
+              image: AssetImage(menu.imageUrl),
+              fit: BoxFit.cover,
+            ),
+          ),
+        ),
+        Container(
+          height: 175,
+          width: 175,
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(15.0),
+              gradient: LinearGradient(
+                  colors: [
+                    Colors.black.withOpacity(0.3),
+                    Colors.black87.withOpacity(0.3),
+                    Colors.black54.withOpacity(0.3),
+                    Colors.black38.withOpacity(0.3),
+                  ],
+                  begin: Alignment.topRight,
+                  end: Alignment.bottomLeft,
+                  stops: [0.1, 0.5, 0.6, 0.9])),
+        ),
+        Positioned(
+          bottom: 65.0,
+          child: Column(
+            children: [
+              Text(
+                menu.name,
+                style: TextStyle(
+                    letterSpacing: 1.2,
+                    fontSize: 24.0,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold),
+              ),
+              Text(
+                "£${menu.price}",
+                style: TextStyle(
+                    letterSpacing: 1.2,
+                    fontSize: 18.0,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold),
+              )
+            ],
+          ),
+        ),
+        Positioned(
+            bottom: 10.0,
+            right: 10.0,
+            child: Container(
+              width: 48.0,
+              decoration: BoxDecoration(
+                color: Theme.of(context).primaryColor,
+                borderRadius: BorderRadius.circular(24.0),
+              ),
+              child: IconButton(
+                  icon: Icon(
+                    Icons.add,
+                    color: Colors.white,
+                  ),
+                  onPressed: () {}),
+            ))
+      ],
+    ));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -119,19 +194,15 @@ class _RestaurantScreenState extends State<RestaurantScreen> {
               ),
             ),
           ),
-          SizedBox(
-            height: 10.0,
-          ),
           Expanded(
             child: GridView.builder(
+              padding: const EdgeInsets.all(0),
               gridDelegate:
                   SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
               itemCount: widget.restaurant.menu.length,
               itemBuilder: (context, index) {
                 Food food = widget.restaurant.menu[index];
-                return Center(
-                  child: Text(food.name),
-                );
+                return _buildMenuItem(food);
               },
             ),
           )
