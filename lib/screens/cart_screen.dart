@@ -48,6 +48,53 @@ class _CartScreenState extends State<CartScreen> {
                           style: TextStyle(
                               fontSize: 16.0, fontWeight: FontWeight.w600),
                           overflow: TextOverflow.ellipsis,
+                        ),
+                        SizedBox(
+                          height: 10.0,
+                        ),
+                        Container(
+                          width: 100,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10.0),
+                              border: Border.all(
+                                color: Colors.black54,
+                                width: 0.8,
+                              )),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              GestureDetector(
+                                onTap: () {},
+                                child: Text(
+                                  "-",
+                                  style: TextStyle(
+                                      color: Theme.of(context).primaryColor,
+                                      fontWeight: FontWeight.w600),
+                                ),
+                              ),
+                              SizedBox(
+                                width: 20.0,
+                              ),
+                              Text(
+                                order.quantity.toString(),
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 18.0),
+                              ),
+                              SizedBox(
+                                width: 20.0,
+                              ),
+                              GestureDetector(
+                                onTap: () {},
+                                child: Text(
+                                  "+",
+                                  style: TextStyle(
+                                      color: Theme.of(context).primaryColor,
+                                      fontWeight: FontWeight.w600),
+                                ),
+                              ),
+                            ],
+                          ),
                         )
                       ],
                     ),
@@ -55,6 +102,10 @@ class _CartScreenState extends State<CartScreen> {
                 )
               ],
             ),
+          ),
+          Text(
+            '£${order.quantity * order.food.price}',
+            style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.w600),
           )
         ],
       ),
@@ -63,6 +114,9 @@ class _CartScreenState extends State<CartScreen> {
 
   @override
   Widget build(BuildContext context) {
+    double totalPrice = 0;
+    currentUser.cart.forEach(
+        (Order order) => totalPrice += order.quantity * order.food.price);
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -74,9 +128,65 @@ class _CartScreenState extends State<CartScreen> {
         ),
       ),
       body: ListView.separated(
+          physics: BouncingScrollPhysics(),
           itemBuilder: (BuildContext context, int Index) {
-            Order order = currentUser.cart[Index];
-            return _buildCartItem(order);
+            if (Index < currentUser.cart.length) {
+              Order order = currentUser.cart[Index];
+              return _buildCartItem(order);
+            }
+
+            return Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Estimated Delivery time',
+                        style: TextStyle(
+                          fontSize: 16.0,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Text(
+                        '25 Min',
+                        style: TextStyle(
+                          fontSize: 16.0,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 10.0,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Total Cost',
+                        style: TextStyle(
+                          fontSize: 16.0,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Text(
+                        '£${totalPrice.toStringAsFixed(2)}',
+                        style: TextStyle(
+                          fontSize: 16.0,
+                          color: Colors.green[700],
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 80.0,
+                  )
+                ],
+              ),
+            );
           },
           separatorBuilder: (context, index) {
             return Divider(
@@ -84,7 +194,23 @@ class _CartScreenState extends State<CartScreen> {
               height: 1.0,
             );
           },
-          itemCount: currentUser.cart.length),
+          itemCount: currentUser.cart.length + 1),
+      bottomSheet: Container(
+        height: 70,
+        width: MediaQuery.of(context).size.width,
+        color: Theme.of(context).primaryColor,
+        child: TextButton(
+          child: Text(
+            'CHECKOUT',
+            style: TextStyle(
+                color: Colors.white,
+                fontSize: 22.0,
+                fontWeight: FontWeight.bold,
+                letterSpacing: 2.0),
+          ),
+          onPressed: () {},
+        ),
+      ),
     );
   }
 }
